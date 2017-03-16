@@ -8,6 +8,6 @@
 
 (facts "about ordered jobs"
        (fact "if no jobs are given the output is an empty sequence of jobs"
-             (order no-job) => "")
+             (sequence-jobs no-job) => "")
        (fact "if a single job is given the output is a single job"
-             (order single-job) => "a"))
+             (sequence-jobs single-job) => "a"))

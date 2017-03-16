@@ -1,6 +1,6 @@
 (ns ordered-jobs.core)
 
-(defn order [dependencies]
-  (if (empty? dependencies)
+(defn sequence-jobs [jobs]
+  (if (empty? jobs)
     ""
     "a"))
