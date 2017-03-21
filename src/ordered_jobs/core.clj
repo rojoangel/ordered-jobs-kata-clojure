@@ -3,7 +3,7 @@
 
 (defrecord Dependency [from to])
 
-(defn by-dependency [x y]
+(defn- by-dependency [x y]
   (if (= (:to y) (:from x))
     -1
     (if (= (:to x) (:from y))
@@ -14,7 +14,7 @@
           1
           (compare (:from x) (:from y)))))))
 
-(defn line->dependency [line]
+(defn- line->dependency [line]
   (let [[from to] (str/split line #"=>")]
     (if to
       (->Dependency (str/trim from) (str/trim to))
