@@ -26,6 +26,9 @@
 
 
 (defn sequence-jobs [jobs]
-  (if (empty? jobs)
-    jobs
-    (str/join (map :from (sort by-dependency (parse-jobs jobs))))))
+  (let [dependencies (parse-jobs jobs)]
+    (if (some #(= (:to %) (:from %)) dependencies)
+      (throw
+        (ex-info "Circular Reference"
+                 {:error-type :circular-reference}))
+      (str/join (map :from (sort by-dependency dependencies))))))

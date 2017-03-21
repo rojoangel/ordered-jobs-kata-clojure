@@ -1,6 +1,7 @@
 (ns ordered-jobs.core-test
   (:use midje.sweet)
-  (:use [ordered-jobs.core]))
+  (:use [ordered-jobs.core])
+  (:import (clojure.lang ExceptionInfo)))
 
 (def no-job "")
 
@@ -12,6 +13,8 @@
 
 (def multiple-jobs-multiple-dependencies "a =>\nb => c\nc => f\nd => a\ne => b\nf =>")
 
+(def multiple-jobs-self-referencing-dependency "a =>\nb =>\nc => c")
+
 (facts "about ordered jobs"
        (fact "if no jobs are given the output is an empty sequence of jobs"
              (sequence-jobs no-job) => "")
@@ -22,4 +25,7 @@
        (fact "if a single dependency is given it positions the dependency before the dependent"
              (sequence-jobs multiple-jobs-single-dependency) => "abc")
        (fact "if multiple dependencies are given, it positions the dependencies before the dependents"
-             (sequence-jobs multiple-jobs-multiple-dependencies) => "afcbde"))
+             (sequence-jobs multiple-jobs-multiple-dependencies) => "afcbde")
+       (fact "jobs can't depend on themselves"
+             (sequence-jobs multiple-jobs-self-referencing-dependency) => (throws ExceptionInfo "Circular Reference"
+                                                                                  #(= :circular-reference (:error-type (ex-data %))))))
