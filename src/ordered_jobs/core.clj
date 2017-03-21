@@ -24,7 +24,6 @@
   (let [lines (str/split-lines jobs)]
     (map line->dependency lines)))
 
-
 (defn sequence-jobs [jobs]
   (let [dependencies (parse-jobs jobs)]
     (if (some #(= (:to %) (:from %)) dependencies)
